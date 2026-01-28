@@ -7,13 +7,11 @@ import (
 	"image/jpeg"
 	_ "image/jpeg"
 	"image/png"
-	"io/ioutil"
 	"math"
 	"os"
 	"strings"
 
 	"github.com/golang/freetype/truetype"
-
 	"golang.org/x/image/font"
 	"golang.org/x/image/math/fixed"
 )
@@ -105,7 +103,7 @@ func parseHexColor(x string) (r, g, b, a int) {
 }
 
 func fixp(x, y float64) fixed.Point26_6 {
-	return fixed.Point26_6{fix(x), fix(y)}
+	return fixed.Point26_6{X: fix(x), Y: fix(y)}
 }
 
 func fix(x float64) fixed.Int26_6 {
@@ -130,7 +128,7 @@ func unfix(x fixed.Int26_6) float64 {
 // You can usually just use the Context.LoadFontFace function instead of
 // this package-level function.
 func LoadFontFace(path string, points float64) (font.Face, error) {
-	fontBytes, err := ioutil.ReadFile(path)
+	fontBytes, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}
@@ -140,7 +138,6 @@ func LoadFontFace(path string, points float64) (font.Face, error) {
 	}
 	face := truetype.NewFace(f, &truetype.Options{
 		Size: points,
-		// Hinting: font.HintingFull,
 	})
 	return face, nil
 }
