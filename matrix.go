@@ -50,24 +50,24 @@ func Shear(x, y float64) Matrix {
 
 func (a Matrix) Multiply(b Matrix) Matrix {
 	return Matrix{
-		XX: a.XX*b.XX + a.YX*b.XY,
-		YX: a.XX*b.YX + a.YX*b.YY,
-		XY: a.XY*b.XX + a.YY*b.XY,
-		YY: a.XY*b.YX + a.YY*b.YY,
-		X0: a.X0*b.XX + math.FMA(a.Y0, b.XY, b.X0),
-		Y0: a.X0*b.YX + math.FMA(a.Y0, b.YY, b.Y0),
+		XX: float64(a.XX*b.XX) + float64(a.YX*b.XY),
+		YX: float64(a.XX*b.YX) + float64(a.YX*b.YY),
+		XY: float64(a.XY*b.XX) + float64(a.YY*b.XY),
+		YY: float64(a.XY*b.YX) + float64(a.YY*b.YY),
+		X0: float64(a.X0*b.XX) + float64(a.Y0*b.XY) + b.X0,
+		Y0: float64(a.X0*b.YX) + float64(a.Y0*b.YY) + b.Y0,
 	}
 }
 
 func (a Matrix) TransformVector(x, y float64) (tx, ty float64) {
-	tx = a.XX*x + a.XY*y
-	ty = a.YX*x + a.YY*y
+	tx = float64(a.XX*x) + float64(a.XY*y)
+	ty = float64(a.YX*x) + float64(a.YY*y)
 	return
 }
 
 func (a Matrix) TransformPoint(x, y float64) (tx, ty float64) {
-	tx = a.XX*x + math.FMA(a.XY, y, a.X0)
-	ty = a.YX*x + math.FMA(a.YY, y, a.Y0)
+	tx = float64(a.XX*x) + float64(a.XY*y) + a.X0
+	ty = float64(a.YX*x) + float64(a.YY*y) + a.Y0
 	return
 }
 
